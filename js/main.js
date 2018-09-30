@@ -200,6 +200,29 @@ addMarkersToMap = (restaurants = self.restaurants) => {
   });
 
 }
+
+// Initial setup for the serviceWorker
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+        if(reg.waiting) {
+            console.log('Update ready and waiting');
+        }
+        if(reg.installing) {
+            console.log('Update in progress');
+            reg.installing.addEventListener('statechange', function() {
+                if (this.state == 'installed') {
+                  console.log('Update ready');
+                }
+            });
+        }
+        if(reg.active) {
+          console.log('serviceWorker is ready');
+        }
+    }).catch(function(err) {
+        console.log(err);
+    });
+};
+
 /* addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
@@ -210,25 +233,3 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 } */
-
-// Initial setup for the serviceWorker
-if (serviceWorker in navigator) {
-    navigator.serviceWorker.register('/sw.js').then(function(reg) {
-      if(reg.waiting) {
-          console.log('Update ready and waiting');
-      }
-      if(reg.installing) {
-        console.log('Update in progress');
-        reg.installing.addEventListener('statechange', function() {
-          if (this.state == 'installed') {
-            console.log('Update ready');
-          }
-        });
-      }
-      if(reg.active) {
-        console.log('serviceWorker is ready');
-      }
-    }).catch(function(err) {
-      console.log(err);
-    });
-};
